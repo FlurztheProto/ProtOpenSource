@@ -45,6 +45,8 @@
 #define matrix_width 128
 #define matrix_height 32
 
+#define double_buffer
+
 void getMicrophoneLevel(); //Predefine of function
 void isSpeaking(int microphoneLevel); //Predefine of function
 void isIdle(); //Predefine of function
@@ -65,7 +67,7 @@ unsigned long currentMillis = millis();
 
 // This defines the 'on' time of the display in use. The larger this number,
 // the brighter the display. The ESP will crash if this number is too high.
-uint8_t display_draw_time = 20; //10-50 is usually fine
+//uint8_t display_draw_time = 20; //10-50 is usually fine
 
 PxMATRIX display(128, 32, P_LAT, P_OE, P_A, P_B, P_C, P_D, P_E);
 
@@ -116,11 +118,15 @@ void setup(){
   display.setCursor(26, 8);
   display.print("V1.1"); //CHANGE THIS FOR DIFFERENT LOWER STARTUP TEXT
   delay(3000);
+  //display.display(display_draw_time);
+  display.showBuffer();
 }
 
 //Code in loop will run forever
 void loop(){
     getMicrophoneLevel(); //Constantly listen to the microphone
+    //display.display(display_draw_time);
+    display.showBuffer();
 }
 
 //Voice threshholds
@@ -203,9 +209,7 @@ void drawFace(int x_offset, int y_offset, const uint8_t pixels[]){
   {
     for (int horizontal_increment = 0; horizontal_increment < imageWidth; horizontal_increment++)
     {
-
       display.drawPixelRGB888(horizontal_increment + x_offset, vertical_increment + y_offset, pixels[counter], pixels[counter + 1], pixels[counter + 2]);
-
       counter = counter + 3;
     }
   }
@@ -216,13 +220,11 @@ void drawFace(int x_offset, int y_offset, const uint8_t pixels[]){
   {
     for (int horizontal_increment = 63; horizontal_increment > -1; horizontal_increment--)
     {
-
       display.drawPixelRGB888(horizontal_increment + 64, vertical_increment + y_offset, pixels[counter], pixels[counter + 1], pixels[counter + 2]);
-
       counter = counter + 3;
     }
   }
-  display.display();
+  display.showBuffer();
 }
 
 //EXPERIMENT:
