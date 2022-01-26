@@ -49,7 +49,8 @@ void getMicrophoneLevel(); //Predefine of function
 void isSpeaking(int microphoneLevel); //Predefine of function
 void isIdle(); //Predefine of function
 void drawFace(int x_offset, int y_offset, const uint8_t pixels[]); //Predefine of function
-void Task2code( void * pvParameters ); //Predefine of function
+//EXPERIMENT:
+// void Task2code( void * pvParameters ); //Predefine of function
 
 hw_timer_t * timer = NULL;
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
@@ -89,15 +90,16 @@ uint16_t BLACK = display.color565(0, 0, 0);
 //Code in setup only runs once
 void setup(){
   pinMode(MIC_PIN, INPUT); //Sets mode of mic pin (PIN 0) to input
-  xTaskCreatePinnedToCore(
-    Task2code,    // Task function.
-    "Task2",      // name of task.
-    11000,        //Stack size of task
-    NULL,         // parameter of the task
-    24,           // priority of the task
-    &Task2,       // Task handle to keep track of created task
-    0             // pin task to core 1
-  );          
+  //EXPERIMENT:
+  // xTaskCreatePinnedToCore(
+  //   Task2code,    // Task function.
+  //   "Task2",      // name of task.
+  //   11000,        //Stack size of task
+  //   NULL,         // parameter of the task
+  //   24,           // priority of the task
+  //   &Task2,       // Task handle to keep track of created task
+  //   0             // pin task to core 1
+  // );          
   delay(500);
 
   display.begin(16);
@@ -220,12 +222,14 @@ void drawFace(int x_offset, int y_offset, const uint8_t pixels[]){
       counter = counter + 3;
     }
   }
+  display.display();
 }
 
-//Refresh the screen once every millisecond.
-void Task2code( void * pvParameters ) {  
-  for (;;) {
-    delay(1);
-    display.display(50);
-  }
-}
+//EXPERIMENT:
+// //Refresh the screen once every millisecond.
+// void Task2code( void * pvParameters ) {  
+//   for (;;) {
+//     delay(1);
+//     display.display(50);
+//   }
+// }
